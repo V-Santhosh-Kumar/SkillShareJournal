@@ -19,5 +19,25 @@ class User(Document):
     addedTime = DateTimeField(default=datetime.now())
     updatedTime = DateTimeField()
 
+class Like(Document):
+    id = StringField(primary_key=True, default=lambda:str(uuid4()))   
+    user = ReferenceField(User)
+    count = IntField(default=0)
+    note = ReferenceField(Note, reverse_delete_rule=True)
+    addedTime = DateTimeField(default=datetime.now())
+    updatedTime = DateTimeField()
+
+class Comment(Document):
+    id = StringField(primary_key=True, default=lambda:str(uuid4()))   
+    user = ReferenceField(User, reverse_delete_rule=True)
+    count = IntField(default=0)
+    comment = StringField()
+    note = ReferenceField(Note, reverse_delete_rule=True)
+    addedTime = DateTimeField(default=datetime.now())
+    updatedTime = DateTimeField()
+
+
+
+
     
     
