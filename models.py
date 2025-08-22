@@ -44,3 +44,10 @@ class Comment(Document):
     note = ReferenceField(Note, reverse_delete_rule=True)
     addedTime = DateTimeField(default=datetime.now())
     updatedTime = DateTimeField()
+
+class Tags(Document):
+    id = StringField(primary_key=True, default=lambda:str(uuid4()))    
+    name = StringField(unique=True, required=True)
+    description = StringField()
+    addedTime = DateTimeField(default=datetime.now())
+    updatedTime = DateTimeField()
