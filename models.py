@@ -51,3 +51,10 @@ class Tags(Document):
     description = StringField()
     addedTime = DateTimeField(default=datetime.now())
     updatedTime = DateTimeField()
+
+class SavedNotes(Document):
+    id = StringField(primary_key=True, default=lambda:str(uuid4()))  
+    user = ReferenceField(User, reverse_delete_rule=True)
+    Notes = ReferenceField(Note, reverse_delete_rule=True)
+    addedTime = DateTimeField(default=datetime.now())
+    updatedTime = DateTimeField()
