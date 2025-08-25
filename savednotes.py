@@ -1,4 +1,4 @@
-from models import SavedNotes
+from models import SavedNotes, User, Note
 from flask import Flask, request,jsonify
 
 app =Flask(__name__)
@@ -7,18 +7,27 @@ app =Flask(__name__)
 def addsavednotes():
     try:
 
-        data = request.get_json
-        user = data.get("user")
+        data = request.get_json()
+        userId = data.get("userId")
+        notesId = data.get("notesId")
 
-        data = request.get_json
-        notes = data.get("notes")
+        if not userId: 
+            return jsonify({"status": "error", "message": "userId is Required."})
+        
+        if not notesId: 
+            return jsonify({"status": "error", "message": "notesId is Required."})
 
-        if not user or notes:
-            return jsonify({"status": "error", "message": "All Fields are Required"})
+        user = User.objects(id=userId).first()
+        if not user:
+            return jsonify({"status": "error", "message": "User not found."})
+        
+        note = Note.objects(id=notesId).first()
+        if not note:
+            return jsonify({"status": "error", "message": "Note not found."})
         
         SavedNotes(
             user = user,
-            notes= notes
+            note = note
         ).save()
 
 
@@ -31,22 +40,22 @@ def addsavednotes():
 def getAllTags():
     try:
 
-        SavedNotes = SavedNotes.objects()
+        savedNotes = SavedNotes.objects()
 
-        SavedNotes = []
+        savedNotesList = []
 
-        for SavedNotes in SavedNotes:
+        for savednote in savedNotes:
             data = {
-                "id": SavedNotes.id,
-                "user": SavedNotes.name,
-                "notes": SavedNotes.description,
-                "addedTime": SavedNotes.addedTime,
-                "updatedTime": SavedNotes.updatedTime
+                "id": savednote.id,
+                "user": savednote.user.name,
+                "notes": savednote.note.name,
+                "addedTime": savednote.addedTime,
+                "updatedTime": savednote.updatedTime
             }
 
-            SavedNotes.append(data)
+            savedNotesList.append(data)
 
-        return jsonify({"status": "success", "message": "SavedNotes Retrieved Successfully", "data": SavedNotes})
+        return jsonify({"status": "success", "message": "SavedNotes Retrieved Successfully", "data": savedNotesList})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
 

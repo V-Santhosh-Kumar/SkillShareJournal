@@ -24,7 +24,7 @@ class Note(document):
     title = StringField(unique=True, required=True)
     description = StringField(required=True)
     code = StringField()
-    image = StringField()
+    image = StringField()   
     addedTime = DateTimeField(default=datetime.now())
     updatedTime = DateTimeField()
 
@@ -55,6 +55,6 @@ class Tags(Document):
 class SavedNotes(Document):
     id = StringField(primary_key=True, default=lambda:str(uuid4()))  
     user = ReferenceField(User, reverse_delete_rule=True)
-    Notes = ReferenceField(Note, reverse_delete_rule=True)
+    note = ReferenceField(Note, reverse_delete_rule=True)
     addedTime = DateTimeField(default=datetime.now())
     updatedTime = DateTimeField()

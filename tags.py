@@ -9,16 +9,14 @@ def addtags():
 
         data = request.get_json()
         name = data.get("name")
+        description = data.get("description")
 
-        data = request.get_json()
-        descrption = data.get("description")
-
-        if not name or descrption:
+        if not name or description:
             return jsonify({"status": "error", "message": "All Fields are Required"})
         
         Tags(
             name = name,
-            description = descrption
+            description = description
         ).save()
 
 
@@ -26,7 +24,7 @@ def addtags():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
     
-
+    
 @app.get("/tags/getAll")
 def getAllTags():
     try:
@@ -35,13 +33,13 @@ def getAllTags():
 
         tagsList = []
 
-        for tags in tags:
+        for tag in tags:
             data = {
-                "id": tags.id,
-                "name": tags.name,
-                "description": tags.description,
-                "addedTime": tags.addedTime,
-                "updatedTime": tags.updatedTime
+                "id": tag.id,
+                "name": tag.name,
+                "description": tag.description,
+                "addedTime": tag.addedTime,
+                "updatedTime": tag.updatedTime
             }
 
             tagsList.append(data)
