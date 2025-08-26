@@ -21,10 +21,13 @@ def addUser():
         if not username or not email or not password:
             return jsonify({"status": "error", "message": "All Fields are Required"})
 
-        if role_id:
-            role = Role.objects(id=role_id).first()
-            if not role:
-                return jsonify({"status": "error", "message": "Invalid Role"})
+        if not role_id:
+            return jsonify({"status": "error", "message": "Invalid Role"})
+
+        role = Role.objects(id=role_id).first()
+
+        if not role:
+            return jsonify({"status": "error", "message": "Role not found."})
 
         user = User(username=username, email=email, password=password, phone=phone, role=role)
         user.save()
@@ -60,4 +63,87 @@ def get_all_users():
         
         return jsonify({"status": "error", "message": str(e)})
 
+
+@app.get('/user/getSpecific')
+def getSpecificUser():
+    try:
+        id = request.args.get('id')
+
+        if not id:
+            return jsonify({"status": "error", "message": "Id is Required"})
+
+        user = User.objects(id=id).first()
+
+        if not user:
+            return jsonify({"status": "error", "message": "User not found."})
+
+        data = {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "phone": user.phone,
+                "role": user.role.name,
+                "addedTime": user.addedTime,
+                "updatedTime": user.updatedTime
+            }
+        
+        return jsonify({"status": "success", "message": "User Retrieved Successfully", "data": data})
     
+    except Exception as e:
+
+        return jsonify({"status": "error", "message": str(e)})
+
+
+@app.put('/user/update')
+def updateUser():
+    try:
+        id = request.args.get('id')
+
+        if not id:
+            return jsonify({"status": "error", "message": "Id is Required"})
+        
+        user = User.objects(id=id).first()
+
+        if not User:
+            return jsonify({"status": "error", "message": "User not found."})
+        
+        data = request.get_json()
+        role_id = data.get("role_id")
+        if not role_id:
+            return jsonify({"status": "error", "message": "Invalid Role"})
+
+        role = Role.objects(id=role_id).first()
+
+        if not role:
+            return jsonify({"status": "error", "message": "Role not found."})
+        
+        user.role = role
+        user.phone = data["phone"]
+        user.save()
+
+        return jsonify({"status": "success", "message": "User Updated Successfully"})
+    
+    except Exception as e:
+
+        return jsonify({"status": "error", "message": str(e)})
+    
+@app.put('/user/delete')
+def updateUser():
+    try:
+        id = request.args.get('id')
+
+        if not id:
+            return jsonify({"status": "error", "message": "Id is Required"})
+
+        user = User.objects(id=id).first()
+
+        if not user:
+            return jsonify({"status": "error", "message": "User not found."})
+        
+        user.delete()
+
+        return jsonify({"status": "success", "message": "User Deleted Successfully"})
+    
+    except Exception as e:
+
+        return jsonify({"status": "error", "message": str(e)})
