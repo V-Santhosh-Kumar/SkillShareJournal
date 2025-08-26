@@ -37,7 +37,7 @@ def addsavednotes():
     
 
 @app.get("/savednotes/getAll")
-def getAllTags():
+def getAllSavedNotes():
     try:
 
         savedNotes = SavedNotes.objects()
@@ -59,3 +59,88 @@ def getAllTags():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
 
+@app.get('/savednotes/getSpecific')
+def getSpecificSavedNotes():
+    try:
+        id = request.args.get('id')
+
+        if not id:
+            return jsonify({"status": "error", "message": "Id is Required"})
+
+        savedNotes = SavedNotes.objects(id=id).first()
+
+        if not savedNotes:
+            return jsonify({"status": "error", "message": "SavedNotes not found."})
+
+        data = { 
+            "id": savedNotes.id,
+            "user": savedNotes.user.name,
+            "notes": savedNotes.note.name,
+            "addedTime": savedNotes.addedTime,
+            "updatedTime": savedNotes.updatedTime
+        }   
+
+        return jsonify({"status": "success", "message": "Role Retrieved Successfully", "data": data})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})  
+
+@app.put('/savedNotes/update')
+def updatdSavedNotes():
+    try:
+        id = request.args.get('id')
+
+        if not id:
+            return jsonify({"status": "error", "message": "Id is Required"})
+
+        savedNotes = SavedNotes.objects(id=id).first()
+
+        if not savedNotes:
+            return jsonify({"status": "error", "message": "SavedNotes not found."})
+        
+        data = request.get_json()
+
+        userId = data.get("userId")
+        notesId = data.get("notesId")
+
+        if not userId: 
+            return jsonify({"status": "error", "message": "userId is Required."})
+        
+        if not notesId: 
+            return jsonify({"status": "error", "message": "notesId is Required."})
+
+        user = User.objects(id=userId).first()
+        if not user:
+            return jsonify({"status": "error", "message": "User not found."})
+        
+        note = Note.objects(id=notesId).first()
+        if not note:
+            return jsonify({"status": "error", "message": "Note not found."})
+        
+
+        savedNotes.user = user
+        savedNotes.note = note
+        
+        savedNotes.save()
+
+        return jsonify({"status": "success", "message": "SavedNotes updated Successfully"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})  
+
+@app.put('/savedNotes/delete')
+def updateSavedNotes():
+    try:
+        id = request.args.get('id')
+
+        if not id:
+            return jsonify({"status": "error", "message": "Id is Required"})
+
+        savedNotes = SavedNotes.objects(id=id).first()
+
+        if not savedNotes:
+            return jsonify({"status": "error", "message": "SavedNotes not found."})
+        
+        savedNotes.delete()
+
+        return jsonify({"status": "success", "message": "SavedNotes updated Successfully"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})  
