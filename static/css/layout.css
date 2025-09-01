@@ -1,0 +1,38 @@
+.header{
+    padding-left: 5px;
+    border-bottom: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+.header .headright{
+    gap: 20px;
+    padding-right: 10px;
+}
+.left .column .A{
+    width: 200px;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    padding: 50px;
+    text-align: center;
+} 
+.left .column .B{
+    width: 200px;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    padding: 50px;
+    text-align: center;
+}
+.left .column .C{
+    width: 200px;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    padding: 50px;
+    text-align: center;
+}
+.admin .right{
+    width: 1000px;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
