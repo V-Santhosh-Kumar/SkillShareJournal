@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tag Page</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+</head>
+
+
+
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-dark sticky-top" style="background-color: #EBD6FB !important;">
+        <div class="container-fluid">
+            <!-- Sidebar toggle for mobile -->
+            <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#sidebar" aria-controls="sidebar">
+                ☰
+            </button>
+            <div class="d-flex">
+                <img src="../static/img/sticky-notes.png" width="50px">
+                <a class="navbar-brand mx-4 text-dark fw-bold" href="/dashboard">Skill Share Journal</a>
+            </div>
+
+
+            <!-- Header offcanvas toggle for tablets/mobiles -->
+
+
+            <div class="dropdown">
+                <button class="btn btn-transparent">
+                    <i class="bi bi-person-lines-fill px-2 fs-5 text-dark"></i>
+                </button>
+                <button class="btn btn-transparent" data-bs-toggle="dropdown">
+                    <i class="bi bi-gear px-2 fs-5 text-dark"></i>
+                </button>
+                <ul class="dropdown dropdown-menu">
+                    <!-- <li><a class="dropdown-item" href="#"></a></li>
+                    <li><a class="dropdown-item" href="#"></a></li> -->
+                    <li><a class="dropdown-item" href="/auth/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Layout -->
+    <div class="container-fluid flex-grow-1">
+        <div class="row h-100" style="height: 100vh !important;">
+
+            <!-- Sidebar (Offcanvas for smaller screens, visible always for md and up) -->
+            <div class="col-md-3 col-lg-2 p-0">
+                <div class="offcanvas-md offcanvas-start h-100" tabindex="-1" id="sidebar"
+                    aria-labelledby="sideBarLabel" style="background-color: #FEEBF6 !important; ">
+                    <div class="offcanvas-header d-md-none">
+                        <h5 class="offcanvas-title text-dark" id="sidebarLabel">Sidebar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                    </div>
+                    <div class="offcanvas-body  p-0">
+                        <nav class="nav flex-column mt-5 pt-3 px-2">
+                            <a class="nav-link text-dark fs-5 py-4 fw-semibold" href="/role"><i
+                                    class="bi bi-pencil-square px-2"></i>Role</a>
+                            <a class="nav-link text-dark fs-5 py-4 fw-semibold" href="/user"><i
+                                    class="bi bi-person-circle px-2"></i>User</a>
+                            <a class="nav-link text-dark fs-5 py-4 fw-semibold" href="/Tag"><i
+                                    class="bi bi-tags px-2"></i>Tag</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 p-4 bg-light h-100 overflow-auto">
+                <header>
+                    <nav class="navbar navclass">
+                        <div class="container-fluid d-flex">
+                            <div class="col">
+                                <button class="btn btn-danger">
+                                    Delete
+                                </button>
+                            </div>
+                            <div class="col d-flex justify-content-end">
+                                <button class="btn btn-success" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#addUserModal">
+                                    Add Tag
+                                </button>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <div class="card p-2 mt-5">
+                        <table class="table table-bordered" id="roleTable">
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Added Time</th>
+                                    <th>Updated Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td>John Doe</td>
+                                    <td>adfasdgfsjdbhjewjofujo</td>
+                                    <td>2022-01-01 12:00:00</td>
+                                    <td>2022-01-01 13:00:00</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm"><i
+                                                class="bi bi-pencil px-2"></i>Edit</button>
+                                        <button class="btn btn-danger btn-sm"><i
+                                                class="bi bi-trash px-2"></i>Delete</button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </header>
+            </main>
+        </div>
+
+
+        <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true"
+            style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="userInput">
+                        <div class="container d-flex flex-column  w-100 rounded-3" style=" background-color: #EBD6FB;">
+                            <div class="mb-3">
+                                <label for="InputUserName" class="form-label mt-2">Tag name</label>
+                                <input type="text" class="form-control" id="TagName" placeholder="">
+                            </div>
+                            <div class="mb-3">
+                                <label for="PhoneNO" class="form-label">Description</label>
+                                <textarea name="description" class="form-control" id="tagDescription"></textarea>
+
+                            </div>
+                            <div class="buttons d-flex justify-content-center">                               
+                                <button type="button" class="btn btn-secondary me-2 mb-3" data-bs-dismiss="modal">Close</button>
+                                 <button type="submit" class="btn btn-primary ms-2 mb-3">Save</button>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Bootstrap JS Bundle CDN (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
