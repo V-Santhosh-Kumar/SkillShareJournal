@@ -10,13 +10,15 @@
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
+    <link rel="stylesheet" href="../static/css/role.css">
+
 </head>
 
 
 
 <body>
     <!-- Header -->
-    <nav class="navbar navbar-dark sticky-top" style="background-color: #EBD6FB !important;">
+    <nav class="navbar navbar-dark sticky-top" style="background-color: #DD7D5B !important;">
         <div class="container-fluid">
             <!-- Sidebar toggle for mobile -->
             <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="offcanvas"
@@ -55,7 +57,7 @@
             <!-- Sidebar (Offcanvas for smaller screens, visible always for md and up) -->
             <div class="col-md-3 col-lg-2 p-0">
                 <div class="offcanvas-md offcanvas-start h-100" tabindex="-1" id="sidebar"
-                    aria-labelledby="sideBarLabel" style="background-color: #FEEBF6 !important; ">
+                    aria-labelledby="sideBarLabel" style="background-color: #fbdfc1 !important; ">
                     <div class="offcanvas-header d-md-none">
                         <h5 class="offcanvas-title text-dark" id="sidebarLabel">Sidebar</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
@@ -71,7 +73,9 @@
             </div>
 
             <!-- Main Content -->
-            <main class="col-md-9 col-lg-10 p-4 bg-light h-100 overflow-auto">
+            <main class="col-md-9 col-lg-10 p-4 bg-light h-100 overflow-auto" style="background-image: url(../static/img/cozy-autumn-workspace-with-paper-books-fall-leaves.jpg);background-size: cover; 
+                        background-position: center; 
+                        height: 100vh;">
                 <header>
                     <nav class="navbar navclass">
                         <div class="container-fluid d-flex">
@@ -88,7 +92,7 @@
                         </div>
                     </nav>
 
-                    <div class="card p-2 mt-5">
+                    <div class="card p-2 mt-5 custom-table">
                         <table class="table table-bordered" id="roleTable">
                             <thead>
                                 <tr>
@@ -101,7 +105,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="checkbox"></td>
+                                    <td><input class="form-check-input" type="checkbox"></td>
                                     <td>John Doe</td>
                                     <td>2022-01-01 12:00:00</td>
                                     <td>2022-01-01 13:00:00</td>

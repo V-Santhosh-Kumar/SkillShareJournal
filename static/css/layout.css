@@ -6,7 +6,7 @@
     text-align: center;
 }
 .header .headright{
-    gap: 20px;
+    gap: 10px;
     padding-right: 10px;
 }
 .left .column .A{
@@ -36,3 +36,24 @@
     justify-content: space-between;
     align-items: start;
 }
+
+ .custom-table {
+      background: rgba(255, 255, 255, 0.2); /* Transparent white */
+      backdrop-filter: blur(10px);          /* Frosted glass effect */
+      -webkit-backdrop-filter: blur(10px);  /* Safari support */
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Soft shadow */
+    }
+
+    .custom-table th, 
+    .custom-table td {
+      background: rgba(255, 255, 255, 0.1); /* Slight transparency for cells */
+      color: black;                          /* Keep text black */
+      border: 1px solid rgba(255, 255, 255, 0.3); /* Light border */
+    }
+
+    .customs-table thead th {
+      font-weight: bold;
+      color: #000;
+    }
