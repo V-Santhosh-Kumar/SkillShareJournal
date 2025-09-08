@@ -1,7 +1,6 @@
 from models import Role
-from flask import Flask, request, jsonify
-
-app = Flask(__name__)
+from flask import request, jsonify
+from app import app
 
 @app.post("/role/new")
 def addRole():

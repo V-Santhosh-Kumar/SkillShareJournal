@@ -1,11 +1,7 @@
 from mongoengine import *
-from uuid import uuid4
-from datetime import datetime
 from models import *
-from flask import Flask, request, jsonify
-
-
-app = Flask(__name__)
+from flask import request, jsonify
+from app import app
 
 @app.post("/note/new")
 def addNote():

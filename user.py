@@ -1,12 +1,7 @@
 from models import *
-from flask import Flask, request, jsonify
 from mongoengine import *
-from uuid import uuid4
-from datetime import datetime
-
-
-
-app = Flask(__name__)
+from flask import request, jsonify
+from app import app
 
 @app.post("/user/new")
 def addUser():

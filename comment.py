@@ -1,7 +1,6 @@
 from models import Comment, User, Note
-from flask import Flask, request, jsonify
-
-app = Flask(__name__)
+from flask import request, jsonify
+from app import app
 
 @app.post("/comment/new")
 def addComment():
