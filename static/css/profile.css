@@ -1,0 +1,32 @@
+.profileOut {
+    background-color: #fbdfc1;
+    width: 95%;
+    border-bottom-left-radius: 350px;
+}
+
+.profileIn {
+    padding-left: 130px;
+}
+
+.profileIn img {
+    width: 150px;
+    border-radius: 50%;
+    margin-left: 60px;
+    margin-right: 50px;
+}
+
+
+.profileMiddle a:nth-child(1) {
+
+    transform: translateY(120px);
+
+}
+
+.profileMiddle a:nth-child(2) {
+    transform: translateY(220px);
+}
+
+
+.profileMiddle a:nth-child(3) {
+    transform: translateY(320px);
+}
