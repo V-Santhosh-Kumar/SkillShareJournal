@@ -19,7 +19,7 @@ class User(Document):
     addedTime = DateTimeField(default=datetime.now())
     updatedTime = DateTimeField()
 
-class Note(document):
+class Note(Document):
     id = StringField(primary_key=True, default=lambda:str(uuid4()))
     title = StringField(unique=True, required=True)
     description = StringField(required=True)

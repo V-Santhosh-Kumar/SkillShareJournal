@@ -1,8 +1,10 @@
 from models import SavedNotes, User, Note
-from flask import request, jsonify
-from app import app
+from flask import request, jsonify, Blueprint
 
-@app.post("/savedNotes/new")
+
+savednotes_bp = Blueprint('savednotes_bp', __name__)
+
+@savednotes_bp.post("/savedNotes/new")
 def addsavednotes():
     try:
 
@@ -35,7 +37,7 @@ def addsavednotes():
         return jsonify({"status": "error", "message": str(e)})
     
 
-@app.get("/savednotes/getAll")
+@savednotes_bp.get("/savednotes/getAll")
 def getAllSavedNotes():
     try:
 
@@ -58,7 +60,7 @@ def getAllSavedNotes():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
 
-@app.get('/savednotes/getSpecific')
+@savednotes_bp.get('/savednotes/getSpecific')
 def getSpecificSavedNotes():
     try:
         id = request.args.get('id')
@@ -83,7 +85,7 @@ def getSpecificSavedNotes():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
 
-@app.put('/savedNotes/update')
+@savednotes_bp.put('/savedNotes/update')
 def updatdSavedNotes():
     try:
         id = request.args.get('id')
@@ -125,8 +127,8 @@ def updatdSavedNotes():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
 
-@app.put('/savedNotes/delete')
-def updateSavedNotes():
+@savednotes_bp.put('/savedNotes/delete')
+def deleteSavedNotes():
     try:
         id = request.args.get('id')
 

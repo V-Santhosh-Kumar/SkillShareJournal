@@ -1,9 +1,11 @@
 from mongoengine import *
 from models import *
-from flask import request, jsonify
-from app import app
+from flask import request, jsonify, Blueprint
 
-@app.post("/note/new")
+
+note_bp = Blueprint('note_bp', __name__)
+
+@note_bp.post("/note/new")
 def addNote():
     try:
         data = request.get_json()
@@ -34,7 +36,7 @@ def addNote():
         return jsonify({"status": "error", "message": str(e)})
 
 
-@app.get("/note/getAll")
+@note_bp.get("/note/getAll")
 def get_all_notes():
     try:
         notes = Note.objects()
@@ -60,7 +62,7 @@ def get_all_notes():
         return jsonify({"status": "error", "message": str(e)})
     
 
-@app.get('/note/getSpecific')
+@note_bp.get('/note/getSpecific')
 def getSpecificNote():
     try:
         id = request.args.get('id')
@@ -91,7 +93,7 @@ def getSpecificNote():
         return jsonify({"status": "error", "message": str(e)})
 
 
-@app.put('/note/update')
+@note_bp.put('/note/update')
 def updateNote():
     try:
         id = request.args.get('id')
@@ -119,8 +121,8 @@ def updateNote():
 
         return jsonify({"status": "error", "message": str(e)})
     
-@app.put('/note/delete')
-def updateNote():
+@note_bp.put('/note/delete')
+def deleteNote():
     try:
         id = request.args.get('id')
 

@@ -1,8 +1,10 @@
 from models import Like, User, Note
-from flask import request, jsonify
-from app import app
+from flask import request, jsonify, Blueprint
 
-@app.post("/like/liked")
+
+like_bp = Blueprint('like_bp', __name__)
+
+@like_bp.post("/like/liked")
 def addLike():
     try:
 
@@ -42,7 +44,7 @@ def addLike():
         return jsonify({"status": "error", "message": str(e)})
     
 
-@app.post("/like/disliked")
+@like_bp.post("/like/disliked")
 def removeLike():
     try:
 

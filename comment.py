@@ -1,8 +1,10 @@
 from models import Comment, User, Note
-from flask import request, jsonify
-from app import app
+from flask import request, jsonify, Blueprint
 
-@app.post("/comment/new")
+
+comment_bp = Blueprint('comment_bp', __name__)
+
+@comment_bp.post("/comment/new")
 def addComment():
     try:
 
@@ -40,7 +42,7 @@ def addComment():
         return jsonify({"status": "error", "message": str(e)})
     
 
-@app.get("/comment/getAll")
+@comment_bp.get("/comment/getAll")
 def getAllComment():
     try:
 
@@ -65,7 +67,7 @@ def getAllComment():
         return jsonify({"status": "error", "message": str(e)})  
          
 
-@app.get('/comment/getSpecific')
+@comment_bp.get('/comment/getSpecific')
 def getSpecificComment():
     try:
         id = request.args.get('id')
@@ -91,7 +93,7 @@ def getSpecificComment():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
 
-@app.put('/comment/update')
+@comment_bp.put('/comment/update')
 def updateComment():
     try:
         id = request.args.get('id')
@@ -137,7 +139,7 @@ def updateComment():
     
 
 
-@app.put('/comment/delete')
+@comment_bp.put('/comment/delete')
 def updateComment():
     try:
         id = request.args.get('id')

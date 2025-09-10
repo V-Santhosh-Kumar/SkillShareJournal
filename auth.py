@@ -1,8 +1,10 @@
 from models import User
-from flask import request, jsonify, session, render_template
-from app import app
+from flask import request, jsonify, session, render_template, Blueprint
 
-@app.post("/auth/login")
+
+auth_bp = Blueprint('auth_bp', __name__)
+
+@auth_bp.post("/auth/login")
 def login():
     try:
 
@@ -30,7 +32,7 @@ def login():
         return jsonify({"status": "error", "message": str(e)})
     
     
-@app.post("/auth/register")
+@auth_bp.post("/auth/register")
 def register():
     try:
 
@@ -62,7 +64,7 @@ def register():
         return jsonify({"status": "error", "message": str(e)})
     
 
-@app.post('/auth/logout')
+@auth_bp.post('/auth/logout')
 def logout():
     user = session["user"]
     if not user:

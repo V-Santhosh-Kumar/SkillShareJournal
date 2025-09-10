@@ -1,9 +1,11 @@
 from models import *
 from mongoengine import *
-from flask import request, jsonify
-from app import app
+from flask import request, jsonify, Blueprint
 
-@app.post("/user/new")
+
+user_bp = Blueprint('user_bp', __name__)
+
+@user_bp.post("/user/new")
 def addUser():
     try:
         data = request.get_json()
@@ -34,7 +36,7 @@ def addUser():
 
         return jsonify({"status": "error", "message": str(e)})
 
-@app.get("/user/getAll")
+@user_bp.get("/user/getAll")
 def get_all_users():
     try:
         users = User.objects()
@@ -59,7 +61,7 @@ def get_all_users():
         return jsonify({"status": "error", "message": str(e)})
 
 
-@app.get('/user/getSpecific')
+@user_bp.get('/user/getSpecific')
 def getSpecificUser():
     try:
         id = request.args.get('id')
@@ -89,7 +91,7 @@ def getSpecificUser():
         return jsonify({"status": "error", "message": str(e)})
 
 
-@app.put('/user/update')
+@user_bp.put('/user/update')
 def updateUser():
     try:
         id = request.args.get('id')
@@ -122,8 +124,8 @@ def updateUser():
 
         return jsonify({"status": "error", "message": str(e)})
     
-@app.put('/user/delete')
-def updateUser():
+@user_bp.put('/user/delete')
+def deleteUser():
     try:
         id = request.args.get('id')
 

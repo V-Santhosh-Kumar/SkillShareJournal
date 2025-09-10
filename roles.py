@@ -1,13 +1,16 @@
 from models import Role
-from flask import request, jsonify
-from app import app
+from flask import request, jsonify, Blueprint
 
-@app.post("/role/new")
+role_bp = Blueprint('role_bp', __name__)
+
+@role_bp.post("/role/new")
 def addRole():
     try:
 
         data = request.get_json()
         name = data.get("name") 
+
+        print(data)
 
         if not name:
             return jsonify({"status": "error", "message": "All Fields are Required"})
@@ -22,7 +25,7 @@ def addRole():
         return jsonify({"status": "error", "message": str(e)})
     
 
-@app.get("/role/getAll")
+@role_bp.get("/role/getAll")
 def getAllRole():
     try:
 
@@ -38,14 +41,14 @@ def getAllRole():
                 "updatedTime": role.updatedTime
             }   
 
-            roleList.append(data)
+            roleList.role_bpend(data)
         
         return jsonify({"status": "success", "message": "Roles Retrieved Successfully", "data": roleList})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
          
 
-@app.get('/role/getSpecific')
+@role_bp.get('/role/getSpecific')
 def getSpecificRole():
     try:
         id = request.args.get('id')
@@ -69,7 +72,7 @@ def getSpecificRole():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
 
-@app.put('/role/update')
+@role_bp.put('/role/update')
 def updateRole():
     try:
         id = request.args.get('id')
@@ -94,8 +97,8 @@ def updateRole():
     
 
 
-@app.put('/role/delete')
-def updateRole():
+@role_bp.put('/role/delete')
+def deleteRole():
     try:
         id = request.args.get('id')
 

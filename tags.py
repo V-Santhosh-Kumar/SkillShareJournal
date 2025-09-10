@@ -1,8 +1,11 @@
 from models import Tags
-from flask import request, jsonify
-from app import app
+from flask import request, jsonify, Blueprint
 
-@app.post("/tags/new")
+
+tags_bp = Blueprint('tags_bp', __name__)
+
+
+@tags_bp.post("/tags/new")
 def addtags():
     try:
 
@@ -24,7 +27,7 @@ def addtags():
         return jsonify({"status": "error", "message": str(e)})
     
 
-@app.get("/tags/getAll")
+@tags_bp.get("/tags/getAll")
 def getAllTags():
     try:
 
@@ -47,7 +50,7 @@ def getAllTags():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
 
-@app.get('/tags/getSpecific')
+@tags_bp.get('/tags/getSpecific')
 def getSpecificTags():
     try:
         id = request.args.get('id')
@@ -72,7 +75,7 @@ def getSpecificTags():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
 
-@app.put('/tag/update')
+@tags_bp.put('/tag/update')
 def updateTags():
      try:
         id = request.args.get('id')     
@@ -97,8 +100,8 @@ def updateTags():
         return jsonify({"status": "error", "message": str(e)})  
 
 
-@app.put('/tags/delete')
-def updateTags():
+@tags_bp.put('/tags/delete')
+def deleteTags():
     try:
         id = request.args.get('id')
 
