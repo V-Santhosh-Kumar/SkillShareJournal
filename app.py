@@ -1,6 +1,16 @@
 from flask import Flask, render_template
+from mongoengine import connect, connection
 
 app = Flask(__name__)
+
+try:
+    connect(host="mongodb://localhost:27017/skillShareJournal")
+    if connection.get_connection():
+        print("Database Connected Successfully.")
+    else:
+        print("Database not Connected.")
+except Exception as e:
+    print("Error: ", str(e))
 
 from roles import role_bp
 app.register_blueprint(role_bp)

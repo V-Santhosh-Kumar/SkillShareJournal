@@ -140,7 +140,7 @@ def updateComment():
 
 
 @comment_bp.put('/comment/delete')
-def updateComment():
+def deleteComment():
     try:
         id = request.args.get('id')
 

@@ -1,5 +1,6 @@
 from models import Role
 from flask import request, jsonify, Blueprint
+from datetime import datetime
 
 role_bp = Blueprint('role_bp', __name__)
 
@@ -30,6 +31,9 @@ def getAllRole():
     try:
 
         roles = Role.objects()
+        search = request.args.get("search[value]", "").strip()
+        if search:
+            roles = roles.filter(name__icontains = search)
 
         roleList = []
 
@@ -41,9 +45,18 @@ def getAllRole():
                 "updatedTime": role.updatedTime
             }   
 
-            roleList.role_bpend(data)
+            roleList.append(data)
+
+        total = Role.objects().count()
         
-        return jsonify({"status": "success", "message": "Roles Retrieved Successfully", "data": roleList})
+        return jsonify({
+            "status": "success", 
+            "message": "Roles Retrieved Successfully", 
+            "data": roleList, 
+            "recordsTotal": total,
+            "recordsFiltered": total,
+            "draw": int(request.args.get("draw", 1))
+        })
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
          
@@ -89,6 +102,7 @@ def updateRole():
 
 
         role.name = data.get("name")
+        role.updatedTime = datetime.now()
         role.save()
 
         return jsonify({"status": "success", "message": "Role updated Successfully"})
@@ -97,7 +111,7 @@ def updateRole():
     
 
 
-@role_bp.put('/role/delete')
+@role_bp.delete('/role/delete')
 def deleteRole():
     try:
         id = request.args.get('id')
