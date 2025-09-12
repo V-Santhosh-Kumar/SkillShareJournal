@@ -33,6 +33,10 @@ def getAllTags():
 
         tags = Tags.objects()
 
+        search = request.args.get("search[value]", "").strip()
+        if search:
+            tags = tags.filter(name__icontains = search)
+
         tagsList = []
 
         for tag in tags:
@@ -45,8 +49,16 @@ def getAllTags():
             }
 
             tagsList.append(data)
+        
+        total = Tags.objects().count()
 
-        return jsonify({"status": "success", "message": "Tags Retrieved Successfully", "data": tagsList})
+        return jsonify({
+            "status": "success", 
+            "message": "Tags Retrieved Successfully", 
+            "data": tagsList, 
+            "recordsTotal": total,
+            "recordsFiltered": total,
+            "draw": int(request.args.get("draw", 1))})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
 
@@ -75,7 +87,7 @@ def getSpecificTags():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
 
-@tags_bp.put('/tag/update')
+@tags_bp.put('/tags/update')
 def updateTags():
      try:
         id = request.args.get('id')     
@@ -83,7 +95,7 @@ def updateTags():
         if not id:
              return jsonify({"status": "error", "message": "Id is Required"})
         
-        tag = Tags.object(id=id).first()
+        tag = Tags.objects(id=id).first()
 
         if not tag:
              return jsonify({"status": "error", "message": "Tag not found"})
@@ -100,7 +112,7 @@ def updateTags():
         return jsonify({"status": "error", "message": str(e)})  
 
 
-@tags_bp.put('/tags/delete')
+@tags_bp.delete('/tags/delete')
 def deleteTags():
     try:
         id = request.args.get('id')
@@ -115,6 +127,6 @@ def deleteTags():
         
         tags.delete()
 
-        return jsonify({"status": "success", "message": "Tags updated Successfully"})
+        return jsonify({"status": "success", "message": "Tags deleted Successfully"})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
