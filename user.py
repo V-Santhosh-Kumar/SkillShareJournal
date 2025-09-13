@@ -1,6 +1,7 @@
 from models import *
 from mongoengine import *
 from flask import request, jsonify, Blueprint
+from datetime import datetime
 
 
 user_bp = Blueprint('user_bp', __name__)
@@ -49,12 +50,20 @@ def get_all_users():
                 "email": user.email,
                 "phone": user.phone,
                 "role": user.role.name,
+                "roleId": user.role.id,
                 "addedTime": user.addedTime,
                 "updatedTime": user.updatedTime
             }
             user_list.append(data)
-
-        return jsonify({"status": "success", "message": "Users Retrieved Successfully", "data": user_list})
+        total = User.objects().count()
+        return jsonify({
+            "status": "success", 
+            "message": "Users Retrieved Successfully", 
+            "data": user_list,
+            "recordsTotal": total,
+            "recordsFiltered": total,
+            "draw": int(request.args.get("draw", 1))
+        })
     
     except Exception as e:
         
@@ -116,6 +125,7 @@ def updateUser():
         
         user.role = role
         user.phone = data["phone"]
+        role.updatedTime = datetime.now()
         user.save()
 
         return jsonify({"status": "success", "message": "User Updated Successfully"})
