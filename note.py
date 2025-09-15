@@ -8,32 +8,35 @@ note_bp = Blueprint('note_bp', __name__)
 @note_bp.post("/note/new")
 def addNote():
     try:
-        data = request.get_json()
-        title = data.get("title")
-        description = data.get("description")
-        code = data.get("code")
-        image = data.get("image")
-        user_id = data.get("user_id")
+        title = request.form.get("title")
+        description = request.form.get("description")
+        code = request.form.get("code")
+        images = request.files.getlist("images[]")  # receive multiple files
 
         if not title or not description:
             return jsonify({"status": "error", "message": "All Fields are Required"})
-        
-        if not user_id:
-            return jsonify({"status": "error", "message": "User Id not found"})
-        
-        user = User.objects(id=user_id).first()
-        if not user:
-            return jsonify({"status": "error", "message": "Invalid User"})
 
-        note = Note(title=title, description=description, code=code, image=image, user=user)
+        # Save images (example: local 'uploads/' folder)
+        saved_files = []
+        for img in images:
+            if img.filename:
+                filepath = f"uploads/{img.filename}"
+                img.save(filepath)
+                saved_files.append(filepath)
+
+        note = Note(
+            title=title,
+            description=description,
+            code=code,
+            image=saved_files  # or store paths/URLs
+        )
         note.save()
-
 
         return jsonify({"status": "success", "message": "Note Added Successfully"})
     
     except Exception as e:
-
         return jsonify({"status": "error", "message": str(e)})
+
 
 
 @note_bp.get("/note/getAll")
@@ -49,7 +52,7 @@ def get_all_notes():
                 "description": note.description,
                 "code": note.code,
                 "image": note.image,
-                "user": note.user.name,
+                "user": note.user.username if note.user else None,
                 "addedTime": note.addedTime,
                 "updatedTime": note.updatedTime
             }
@@ -140,4 +143,6 @@ def deleteNote():
     
     except Exception as e:
 
-        return jsonify({"status": "error", "message": str(e)})  
+        return jsonify({"status": "error", "message": str(e)})
+    
+

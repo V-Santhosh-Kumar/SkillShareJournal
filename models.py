@@ -24,7 +24,7 @@ class Note(Document):
     title = StringField(unique=True, required=True)
     description = StringField(required=True)
     code = StringField()
-    image = StringField()
+    image = ListField(StringField())
     user = ReferenceField(User, reverse_delete_rule=CASCADE)
     addedTime = DateTimeField(default=datetime.now())
     updatedTime = DateTimeField()
