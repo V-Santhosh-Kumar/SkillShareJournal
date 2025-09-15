@@ -129,3 +129,15 @@ def deleteRole():
         return jsonify({"status": "success", "message": "Role updated Successfully"})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
+    
+
+@role_bp.get('/role/getAllNames')
+def allRolesNames():
+    try:
+        role_names = []
+        for role_obj in Role.objects.all(): # Assuming 'all' retrieves multiple objects
+            role_names.append({"id": role_obj.id, "name": role_obj.name})
+
+        return jsonify({"status": "success", "message": "All Role Names Retrieved Successfully", "data": role_names})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})  

@@ -1,4 +1,4 @@
-const form = document.getElementById("roleForm")
+const form = document.getElementById("userForm")
 
 form.addEventListener('submit', (e)=>{
     e.preventDefault()
@@ -6,10 +6,10 @@ form.addEventListener('submit', (e)=>{
     const formData = new FormData(form)
     const data = Object.fromEntries(formData)
 
-    let id = document.getElementById("roleId")?.value
+    let id = document.getElementById("userId")?.value
 
     if (id) {
-        fetch(`/role/update?id=${id}`, {
+        fetch(`/user/update?id=${id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json'
@@ -25,7 +25,7 @@ form.addEventListener('submit', (e)=>{
             else{
                 
                 if (data.message.includes("duplicate")) {
-                    alert("This role already exists.")    
+                    alert("This user name is already exists.")    
                 }
                 else{
                     alert(data.message)
@@ -34,7 +34,7 @@ form.addEventListener('submit', (e)=>{
         })
     }
     else{
-        fetch('/role/new', {
+        fetch('/user/new', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -44,13 +44,11 @@ form.addEventListener('submit', (e)=>{
         .then(resposne => resposne.json())
         .then(data =>{
             if (data.status == "success") {
-                alert(data.message)
-                form.reset()
+                location.reload()
             }
             else{
-                
                 if (data.message.includes("duplicate")) {
-                    alert("This role already exists.")    
+                    alert("This user name is already exists.")    
                 }
                 else{
                     alert(data.message)
@@ -67,18 +65,21 @@ form.addEventListener('submit', (e)=>{
 
 
 $(document).ready(function () {
-    let table = $('#roleTable').DataTable({
+    let table = $('#userTable').DataTable({
         "processing": true,
         "serverSide": true,
         "ajax": {
-            "url": "/role/getAll",
+            "url": "/user/getAll",
             "type": "GET",
             "dataSrc": function (json) {
                 return json.data;
             },
         },
         "columns": [
-            { "data": "name", "defaultContent": "N/A" },
+            { "data": "username", "defaultContent": "N/A" },
+            { "data": "role", "defaultContent": "N/A" },
+            { "data": "email", "defaultContent": "N/A"},
+            { "data": "phone", "defaultContent": "N/A"},
             { "data": "addedTime", "defaultContent": "N/A" },
             { "data": "updatedTime", "defaultContent": "N/A" },
             {
@@ -104,11 +105,11 @@ $(document).ready(function () {
         "autoWidth": false,
     });
 
-    $('#roleTable tbody').on('click', '.delete-btn', function () {
+    $('#userTable tbody').on('click', '.delete-btn', function () {
         let id = $(this).data('id');
         if(confirm('Are you sure you want to delete this inquiry?')){
             $.ajax({
-                url: `/role/delete?id=${id}`,
+                url: `/user/delete?id=${id}`,
                 type: 'DELETE',
                 success: function (response) {
                     if (response.status == "success") {
@@ -135,12 +136,18 @@ document.querySelector('table tbody').addEventListener("click", (event)=>{
         let id = edit_btn.dataset.id
         console.log(id)
 
-        fetch(`/role/getSpecific?id=${id}`)
+        fetch(`/user/getSpecific?id=${id}`)
         .then(resposne => resposne.json())
         .then(data =>{
             if (data.status == "success") {
-                document.getElementById("editRole").value = data.data.name
-                document.getElementById("roleId").value = data.data.id
+                let user = data.data
+                // document.getElementById("editUser").value = data.data.name
+                document.getElementById("editUsername").value = user.username
+                document.getElementById("editPhone").value = user.phone
+                document.getElementById("editEmail").value = user.email
+                document.getElementById("editPassword").value = user.password
+                document.getElementById("roleSelect").value = user.roleId
+                document.getElementById("userId").value = user.id
 
                 let modal = new bootstrap.Modal(document.getElementById("addUserModal"))
                 modal.show()
@@ -150,4 +157,34 @@ document.querySelector('table tbody').addEventListener("click", (event)=>{
             }
         })
     }
+})
+
+
+const addUserModal = document.getElementById('addUserModal')
+addUserModal.addEventListener('shown.bs.modal', event => {
+    fetch('/role/getAllNames')
+    .then(resposne => resposne.json())
+    .then(data =>{
+        if (data.status == "success") {
+            let roleSelect = document.getElementById("roleSelect")
+
+            let roles = data.data
+
+            roles.forEach(role => {
+                let option = document.createElement("option")
+                option.value = role.id
+                option.textContent = role.name
+
+                roleSelect.append(option)
+            });
+        }
+        else{
+            if (data.message.includes("duplicate")) {
+                alert("This user name is already exists.")    
+            }
+            else{
+                alert(data.message)
+            }
+        }
+    })
 })
