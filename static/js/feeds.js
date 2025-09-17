@@ -1,12 +1,18 @@
+
 fetch("/note/getAll")
 .then(res => res.json())
 .then(data =>{
-    if (data.status == "success") {
+    if (data.status === "success") {
         let notes = data.data
 
         document.querySelector(".cardcontainer").innerHTML = ""
 
         notes.forEach(note => {
+            let imgs = ""
+            note.image.forEach(image => {
+                imgs += `<img src="${image}" class="img-thumbnail w-25">`
+            })
+
             let card = `
                 <div class="container mt-5" style="flex:1 0 35%; height: 50vh !important; width: 25% !important;">
                     <div class="d-flex justify-content-between rounded-3"
@@ -18,10 +24,8 @@ fetch("/note/getAll")
                                 </div>
                                 <span class="badge w-25 vh-25  px-1" style="background-color: #DD7D5B ;">Python/var</span>
                             </div>
-                            <div class="d-flex justify-content-between my-3">
-                                <img src="..." class="img-thumbnail" alt="...">
-                                <img src="..." class="img-thumbnail" alt="...">
-                                <img src="..." class="img-thumbnail" alt="...">
+                            <div class="d-flex column-gap-2 my-3" style="width: 100%;overflow-x: auto;">  
+                                ${imgs}
                             </div>
                             <div class="row" style="border-bottom: 1px solid white;">
                                 <h5>${note.title}</h5>
@@ -69,4 +73,4 @@ fetch("/note/getAll")
             document.querySelector(".cardcontainer").innerHTML += card
         });
     }
-})
+})  

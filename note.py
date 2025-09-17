@@ -11,6 +11,7 @@ def addNote():
         title = request.form.get("title")
         description = request.form.get("description")
         code = request.form.get("code")
+        tag = request.form.get("tag")
         images = request.files.getlist("images[]")  # receive multiple files
 
         if not title or not description:
@@ -20,7 +21,7 @@ def addNote():
         saved_files = []
         for img in images:
             if img.filename:
-                filepath = f"uploads/{img.filename}"
+                filepath = f"static/uploads/{img.filename}"
                 img.save(filepath)
                 saved_files.append(filepath)
 
@@ -28,6 +29,7 @@ def addNote():
             title=title,
             description=description,
             code=code,
+            tag=tag,
             image=saved_files  # or store paths/URLs
         )
         note.save()
@@ -52,6 +54,7 @@ def get_all_notes():
                 "description": note.description,
                 "code": note.code,
                 "image": note.image,
+                "tag": note.tag,
                 "user": note.user.username if note.user else None,
                 "addedTime": note.addedTime,
                 "updatedTime": note.updatedTime
@@ -84,6 +87,7 @@ def getSpecificNote():
                 "description": note.description,
                 "code": note.code,
                 "image": note.image,
+                "tag": note.tag,
                 "user": note.user.name,
                 "addedTime": note.addedTime,
                 "updatedTime": note.updatedTime
@@ -115,6 +119,7 @@ def updateNote():
         note.description = data.get("description")
         note.code = data.get("code")
         note.image = data.get("image")
+        note.tag = data.get("tag")
 
         note.save()
 

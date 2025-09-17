@@ -56,6 +56,7 @@ document.getElementById("postForm").addEventListener("submit", function (e) {
             if (data.status == "success") {
                 alert("Post submitted!");
                 document.getElementById("postForm").reset()
+                
             }
         })
         .catch(err => {

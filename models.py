@@ -19,12 +19,20 @@ class User(Document):
     addedTime = DateTimeField(default=datetime.now())
     updatedTime = DateTimeField()
 
+class Tags(Document):
+    id = StringField(primary_key=True, default=lambda:str(uuid4()))    
+    name = StringField(unique=True, required=True)
+    description = StringField()
+    addedTime = DateTimeField(default=datetime.now())
+    updatedTime = DateTimeField()
+
 class Note(Document):
     id = StringField(primary_key=True, default=lambda:str(uuid4()))
     title = StringField(unique=True, required=True)
     description = StringField(required=True)
     code = StringField()
     image = ListField(StringField())
+    tag = ReferenceField(Tags, null=True)
     user = ReferenceField(User, reverse_delete_rule=CASCADE)
     addedTime = DateTimeField(default=datetime.now())
     updatedTime = DateTimeField()
@@ -42,13 +50,6 @@ class Comment(Document):
     user = ReferenceField(User, reverse_delete_rule=CASCADE)
     comment = StringField()
     note = ReferenceField(Note, reverse_delete_rule=CASCADE)
-    addedTime = DateTimeField(default=datetime.now())
-    updatedTime = DateTimeField()
-
-class Tags(Document):
-    id = StringField(primary_key=True, default=lambda:str(uuid4()))    
-    name = StringField(unique=True, required=True)
-    description = StringField()
     addedTime = DateTimeField(default=datetime.now())
     updatedTime = DateTimeField()
 
