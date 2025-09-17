@@ -57,7 +57,7 @@ fetch("/note/getAll")
                                     style="border: 2px solid black; border-radius: 100px; width: 30px; height: 30px; text-align: center; display: flex; align-items: center; justify-content: center; scale: 0.9;"
                                     aria-disabled="true"><i class="bi bi-person fs-5"></i></a>
                                 <a class="nav-link" aria-disabled="true"><i class="bi bi-heart fs-4"></i>
-                                    <a class="nav-link" aria-disabled="true"><i class="bi bi-chat-left-text fs-4"></i></a>
+                                    <a class="nav-link" aria-disabled="true" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-chat-left-text fs-4"></i></a>
                                     <a class="nav-link" aria-disabled="true"><i class="bi bi-send fs-4"></i></a>
                                     <a class="nav-link" aria-disabled="true"><i class="bi bi-bookmark fs-4"></i></a>
                             </div>
