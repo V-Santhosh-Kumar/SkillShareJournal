@@ -4,7 +4,7 @@ from flask import request, jsonify, Blueprint
 
 savednotes_bp = Blueprint('savednotes_bp', __name__)
 
-@savednotes_bp.post("/savedNotes/new")
+@savednotes_bp.post("/savedNotes/toggle")
 def addsavednotes():
     try:
 
@@ -17,22 +17,24 @@ def addsavednotes():
         
         if not notesId: 
             return jsonify({"status": "error", "message": "notesId is Required."})
-
-        # user = User.objects(id=userId).first()
-        # if not user:
-        #     return jsonify({"status": "error", "message": "User not found."})
         
-        note = Note.objects(id=notesId).first()
-        if not note:
-            return jsonify({"status": "error", "message": "Note not found."})
+        saved = SavedNotes.objects(note=notesId).first()
+
+        if saved:
+            saved.delete()
+            return jsonify({"status": "success", "action": "unsaved"})
+        else:        
+            note = Note.objects(id=notesId).first()
+            if not note:
+                return jsonify({"status": "error", "message": "Note not found."})
         
-        SavedNotes(
-            # user = user,
-            note = note
-        ).save()
+            SavedNotes(
+                # user = user,
+                note = note
+            ).save()
 
 
-        return jsonify({"status": "success", "message": "SavedNotes Added Successfully"})
+            return jsonify({"status": "success", "action": "saved"})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
     

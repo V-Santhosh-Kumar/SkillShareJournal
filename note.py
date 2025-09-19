@@ -48,6 +48,9 @@ def get_all_notes():
         note_list = []
         
         for note in notes:
+            isLiked = Like.objects(note=note).first() is not None
+            isSaved = SavedNotes.objects(note=note.id).first() is not None
+            likeCount = Like.objects().count()
             data = {
                 "id": note.id,
                 "title": note.title,
@@ -57,7 +60,10 @@ def get_all_notes():
                 "tag": note.tag,
                 "user": note.user.username if note.user else None,
                 "addedTime": note.addedTime,
-                "updatedTime": note.updatedTime
+                "updatedTime": note.updatedTime,
+                "isSaved": isSaved,
+                "isLiked": isLiked,
+                "likeCount": likeCount
             }
             note_list.append(data)
 
