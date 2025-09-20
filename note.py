@@ -57,7 +57,7 @@ def get_all_notes():
                 "description": note.description,
                 "code": note.code,
                 "image": note.image,
-                "tag": note.tag,
+                "tag": note.tag.name if note.tag else None,
                 "user": note.user.username if note.user else None,
                 "addedTime": note.addedTime,
                 "updatedTime": note.updatedTime,

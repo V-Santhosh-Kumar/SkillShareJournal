@@ -10,21 +10,21 @@ def addComment():
 
         data = request.get_json()
         comment = data.get("comment") 
-        userId = data.get("userId")
+        # userId = data.get("userId")
         notesId = data.get("notesId")
 
         if not comment:
             return jsonify({"status": "error", "message": "All Fields are Required"})
 
-        if not userId: 
-            return jsonify({"status": "error", "message": "userId is Required."})
+        # if not userId: 
+        #     return jsonify({"status": "error", "message": "userId is Required."})
         
         if not notesId: 
             return jsonify({"status": "error", "message": "notesId is Required."})
 
-        user = User.objects(id=userId).first()
-        if not user:
-            return jsonify({"status": "error", "message": "User not found."})
+        # user = User.objects(id=userId).first()
+        # if not user:
+        #     return jsonify({"status": "error", "message": "User not found."})
         
         note = Note.objects(id=notesId).first()
         if not note:
@@ -32,12 +32,18 @@ def addComment():
 
         comment = Comment( 
             comment = comment,
-            user = user,
+            # user = user,
             note = note,
         ).save()
 
 
-        return jsonify({"status": "success", "message": "Comment Added Successfully"})
+        return jsonify(
+            {"status": "success", "message": "Comment Added Successfully",
+              "data":{
+                  "id": str(comment.id),
+                  "username":getattr(comment.user,"username","Anonymous"),
+                  "comment": comment.comment} 
+        })
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
     
@@ -157,3 +163,26 @@ def deleteComment():
         return jsonify({"status": "success", "message": "Comment updated Successfully"})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})  
+    
+
+@comment_bp.get("/comment/getByNoteId/<note_id>")
+def getByNoteId(note_id):
+    try:
+        comments = Comment.objects(note=note_id).order_by("-addedTime")
+        commentList = []
+
+        for c in comments:
+            commentList.append({
+                "id": str(c.id),
+                "username": getattr(c.user, "username", "Anonymous"),
+                "comment": c.comment,
+                "addedTime": c.addedTime
+            })
+
+        return jsonify({
+            "status": "success",
+            "message": "Comments Retrieved Successfully",
+            "data": commentList
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})

@@ -45,6 +45,10 @@ document.getElementById("postForm").addEventListener("submit", function (e) {
         formData.append("images[]", file);
     });
 
+
+    const tagId = document.querySelector("#roleTag select").value;
+    formData.append("tag", tagId);
+
     // Example: send to Flask endpoint
     fetch("/note/new", {
         method: "POST",
@@ -62,4 +66,26 @@ document.getElementById("postForm").addEventListener("submit", function (e) {
         .catch(err => {
             console.error("Error:", err);
         });
+});
+
+// your existing post.js code here...
+
+// Populate tags dynamically
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("/tags/getAll")
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.data) {
+                let tagSelect = document.querySelector("#roleTag select");
+                tagSelect.innerHTML = '<option value="" disabled selected>Select a tag</option>'; 
+
+                data.data.forEach(tag => {
+                    let option = document.createElement("option");
+                    option.value = tag.id;   // use id for backend reference
+                    option.textContent = tag.name;  // show name
+                    tagSelect.appendChild(option);
+                });
+            }
+        })
+        .catch(err => console.error("Error fetching tags:", err));
 });

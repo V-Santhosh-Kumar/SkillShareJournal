@@ -28,7 +28,7 @@ fetch("/note/getAll")
                   <div class="col-md-2 w-75 p-3" style="overflow-y: auto; scrollbar-width: none;">
                       <div class="row d-flex  justify-content-center align-items-center">
                           <div class="col">2hr ago</div>
-                          <span class="badge w-25 vh-25  px-1" style="background-color: #DD7D5B ;">Python/var</span>
+                          <span class="badge w-25 vh-25  px-1" style="background-color: #DD7D5B ;">${note.tag}</span>
                       </div>
                       <div class="d-flex column-gap-2 my-3" style="width: 100%;overflow-x: auto;">  
                           ${imgs}
@@ -60,10 +60,13 @@ fetch("/note/getAll")
                           </a>
                           <a class="nav-link like-btn d-flex flex-column align-items-center" data-noteid="${note.id}"> ${likeIcon}</a>
 
-                          <a class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                              <i class="bi bi-chat-left-text fs-4"></i>
+                          <a class="nav-link commentBtn" data-noteid="${note.id}" data-bs-toggle="modal" data-bs-target="#commentModal">
+                             <i class="bi bi-chat-left-text fs-4"></i>
+                         </a>
+
+                          <a class="nav-link"  data-bs-toggle="modal" data-bs-target="#shareModal">
+                            <i class="bi bi-send fs-4"></i>
                           </a>
-                          <a class="nav-link"  data-bs-toggle="modal" data-bs-target="#shareModal"><i class="bi bi-send fs-4"></i></a>
 
                           <!-- Bookmark with dataset -->
                           <a class="nav-link bookmark-btn" data-noteid="${note.id}">
@@ -80,7 +83,7 @@ fetch("/note/getAll")
 
                 document.querySelector(".cardcontainer").innerHTML += card;
             });
-
+            
             // Attach click events to all bookmark buttons
             document.querySelectorAll(".bookmark-btn").forEach(btn => {
                 btn.addEventListener("click", () => {
@@ -146,6 +149,12 @@ fetch("/note/getAll")
                         .catch(err => console.error(err));
                 });
             });
+
+            document.querySelectorAll(".commentBtn").forEach(commentBtn => {
+                commentBtn.addEventListener("click", () => {
+                    document.getElementById("notesId").value = commentBtn.getAttribute("data-noteid")
+                })
+            })
         }
     });
 
