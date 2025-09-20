@@ -1,4 +1,4 @@
-from models import SavedNotes, User, Note
+from models import SavedNotes, User, Note, Like
 from flask import request, jsonify, Blueprint
 
 
@@ -39,28 +39,40 @@ def addsavednotes():
         return jsonify({"status": "error", "message": str(e)})
     
 
-@savednotes_bp.get("/savednotes/getAll")
-def getAllSavedNotes():
+@savednotes_bp.get("/savedNotes/getAll")
+def getSavedNotes():
     try:
+        # userId = request.args.get("userId")
+        # if not userId:
+        #     return jsonify({"status": "error", "message": "userId is required"})
 
-        savedNotes = SavedNotes.objects()
+        saved = SavedNotes.objects()  # or filter your relation
+        note_ids = [s.note.id for s in saved]
 
-        savedNotesList = []
+        notes = Note.objects(id__in=note_ids)
+        data = []
+        for note in notes:
+            isLiked = Like.objects(note=note).first() is not None
+            isSaved = SavedNotes.objects(note=note.id).first() is not None
+            likeCount = Like.objects().count()
+            data.append({
+                "id": str(note.id),
+                "title": note.title,
+                "description": note.description,
+                "image": note.image,
+                "tag": note.tag.name if note.tag else None,
+                "user": note.user.username if note.user else None,
+                "addedTime": note.addedTime,
+                "updatedTime": note.updatedTime,
+                "isSaved": isSaved,
+                "isLiked": isLiked,
+                "likeCount": likeCount
+            })
 
-        for savednote in savedNotes:
-            data = {
-                "id": savednote.id,
-                "user": savednote.user.name,
-                "notes": savednote.note.name,
-                "addedTime": savednote.addedTime,
-                "updatedTime": savednote.updatedTime
-            }
-
-            savedNotesList.append(data)
-
-        return jsonify({"status": "success", "message": "SavedNotes Retrieved Successfully", "data": savedNotesList})
+        return jsonify({"status": "success", "data": data})
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)})  
+        return jsonify({"status": "error", "message": str(e)})
+
 
 @savednotes_bp.get('/savednotes/getSpecific')
 def getSpecificSavedNotes():

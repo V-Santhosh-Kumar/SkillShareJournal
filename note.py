@@ -58,6 +58,17 @@ def get_all_notes():
             note_url = url_for('note_bp.getSpecificNote', id=note.id, _external=True)
 
 
+
+            comments = Comment.objects(note=note).order_by("-addedTime")
+            comment_list = []
+            for c in comments:
+                comment_list.append({
+                    "id": str(c.id),
+                    "user": c.user.username if c.user else None,
+                    "comment": c.comment,
+                    "addedTime": c.addedTime,
+                    "updatedTime": c.updatedTime
+                })
             data = {
                 "id": note.id,
                 "title": note.title,
@@ -72,7 +83,8 @@ def get_all_notes():
                 "isSaved": isSaved,
                 "isLiked": isLiked,
                 "likeCount": likeCount,
-                "link": note_url
+                "link": note_url,
+                "comments": comment_list
             }
             note_list.append(data)
 
