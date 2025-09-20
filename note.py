@@ -1,6 +1,6 @@
 from mongoengine import *
 from models import *
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint , url_for
 
 
 note_bp = Blueprint('note_bp', __name__)
@@ -24,13 +24,17 @@ def addNote():
                 filepath = f"static/uploads/{img.filename}"
                 img.save(filepath)
                 saved_files.append(filepath)
+            
+        shareable_link = str(uuid4())
 
         note = Note(
             title=title,
             description=description,
             code=code,
             tag=tag,
-            image=saved_files  # or store paths/URLs
+            image=saved_files,# or store paths/URLs
+            shareableLink=shareable_link
+            # user = current_user 
         )
         note.save()
 
@@ -51,6 +55,9 @@ def get_all_notes():
             isLiked = Like.objects(note=note).first() is not None
             isSaved = SavedNotes.objects(note=note.id).first() is not None
             likeCount = Like.objects().count()
+            note_url = url_for('note_bp.getSpecificNote', id=note.id, _external=True)
+
+
             data = {
                 "id": note.id,
                 "title": note.title,
@@ -59,11 +66,13 @@ def get_all_notes():
                 "image": note.image,
                 "tag": note.tag.name if note.tag else None,
                 "user": note.user.username if note.user else None,
+                "shareableLink": note.shareableLink,
                 "addedTime": note.addedTime,
                 "updatedTime": note.updatedTime,
                 "isSaved": isSaved,
                 "isLiked": isLiked,
-                "likeCount": likeCount
+                "likeCount": likeCount,
+                "link": note_url
             }
             note_list.append(data)
 
@@ -94,7 +103,7 @@ def getSpecificNote():
                 "code": note.code,
                 "image": note.image,
                 "tag": note.tag,
-                "user": note.user.name,
+                "user": note.user.username if note.user else None,
                 "addedTime": note.addedTime,
                 "updatedTime": note.updatedTime
             }

@@ -64,7 +64,7 @@ fetch("/note/getAll")
                              <i class="bi bi-chat-left-text fs-4"></i>
                          </a>
 
-                          <a class="nav-link"  data-bs-toggle="modal" data-bs-target="#shareModal">
+                          <a class="nav-link shareBtn" data-noteid="${note.id}" data-bs-toggle="modal" data-bs-target="#shareModal">
                             <i class="bi bi-send fs-4"></i>
                           </a>
 
@@ -83,7 +83,7 @@ fetch("/note/getAll")
 
                 document.querySelector(".cardcontainer").innerHTML += card;
             });
-            
+
             // Attach click events to all bookmark buttons
             document.querySelectorAll(".bookmark-btn").forEach(btn => {
                 btn.addEventListener("click", () => {
@@ -175,3 +175,20 @@ document.getElementById("copyBtn").addEventListener("click", () => {
         });
 });
 
+document.addEventListener("click", (event) => {
+    if (event.target.closest(".shareBtn")) {
+        const btn = event.target.closest(".shareBtn");
+        const notesId = btn.getAttribute("data-noteid");
+
+        const shareURL = `http://localhost:5000/note/getSpecific?id=${notesId}`;
+        console.log("Generated share URL:", shareURL);
+
+        const shareLinkInput = document.getElementById("shareLink");
+        if (shareLinkInput) {
+            shareLinkInput.value = shareURL;
+        } else {
+            console.error('Share Link input not found!');
+        }
+    }
+});
+    

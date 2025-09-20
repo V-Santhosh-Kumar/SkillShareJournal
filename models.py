@@ -33,6 +33,7 @@ class Note(Document):
     code = StringField()
     image = ListField(StringField())
     tag = ReferenceField(Tags, null=True)
+    shareableLink = StringField()
     user = ReferenceField(User, reverse_delete_rule=CASCADE)
     addedTime = DateTimeField(default=datetime.now())
     updatedTime = DateTimeField()
