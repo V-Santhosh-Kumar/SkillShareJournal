@@ -53,7 +53,7 @@ def getLikedNotes():
                 "title": note.title,
                 "description": note.description,
                 "image": note.image,
-                "tag": note.tag,
+                "tag": note.tag.name if note.tag else None,
                 "isSaved": False,   # you can also check SavedNotes model here
                 "isLiked": True,    # since these are liked
                 "likeCount": Like.objects(note=note.id).count()
