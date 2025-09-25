@@ -1,5 +1,5 @@
 from models import SavedNotes, User, Note, Like
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint, session
 
 
 savednotes_bp = Blueprint('savednotes_bp', __name__)
@@ -9,11 +9,13 @@ def addsavednotes():
     try:
 
         data = request.get_json()
-        # userId = data.get("userId")
         notesId = data.get("notesId")
 
-        # if not userId: 
-        #     return jsonify({"status": "error", "message": "userId is Required."})
+        user = session.get("user")
+        userId = user.get('id')
+
+        if not userId: 
+            return jsonify({"status": "error", "message": "userId is Required."})
         
         if not notesId: 
             return jsonify({"status": "error", "message": "notesId is Required."})
@@ -42,9 +44,11 @@ def addsavednotes():
 @savednotes_bp.get("/savedNotes/getAll")
 def getSavedNotes():
     try:
-        # userId = request.args.get("userId")
-        # if not userId:
-        #     return jsonify({"status": "error", "message": "userId is required"})
+        user = session.get("user")
+        userId = user.get('id')
+
+        if not userId: 
+            return jsonify({"status": "error", "message": "userId is Required."})
 
         saved = SavedNotes.objects()  # or filter your relation
         note_ids = [s.note.id for s in saved]
@@ -114,12 +118,13 @@ def updatdSavedNotes():
         
         data = request.get_json()
 
-        userId = data.get("userId")
-        notesId = data.get("notesId")
+        user = session.get("user")
+        userId = user.get('id')
 
         if not userId: 
             return jsonify({"status": "error", "message": "userId is Required."})
         
+        notesId = data.get("notesId")    
         if not notesId: 
             return jsonify({"status": "error", "message": "notesId is Required."})
 

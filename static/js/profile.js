@@ -204,7 +204,7 @@ document.addEventListener("click", (event) => {
 });
 
 function loadUserProfile(userId) {
-    fetch(`/user/getSpecific?id=${userId}`)
+    fetch(`/user/getSpecific`)
         .then(res => res.json())
         .then(data => {
             if (data.status === "success") {
@@ -250,6 +250,6 @@ function loadUserProfile(userId) {
 }
 
 // Example usage → pass logged-in user ID
-loadUserProfile("680b3591-ef2d-45ac-9343-133fc8adc290");
+loadUserProfile();
 
     

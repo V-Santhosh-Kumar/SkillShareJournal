@@ -1,6 +1,6 @@
 from models import *
 from mongoengine import *
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint, session
 from datetime import datetime
 
 
@@ -73,7 +73,9 @@ def get_all_users():
 @user_bp.get('/user/getSpecific')
 def getSpecificUser():
     try:
-        id = request.args.get('id')
+        user = session.get('user')
+        print(user)
+        id = user["id"]
 
         if not id:
             return jsonify({"status": "error", "message": "Id is Required"})
@@ -93,7 +95,7 @@ def getSpecificUser():
                 "username": user.username,
                 "email": user.email,
                 "phone": user.phone,
-                "role": user.role.name,
+                "role": user.role.name if user.role else None,
                 "addedTime": user.addedTime,
                 "updatedTime": user.updatedTime,
                 "likeCount": like,

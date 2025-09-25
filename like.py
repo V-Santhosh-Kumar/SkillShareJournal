@@ -1,10 +1,5 @@
 from models import Like, User, Note
-from flask import request, jsonify, Blueprint
-
-
-like_bp = Blueprint('like_bp', __name__)
-from models import Like, Note
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint,session
 
 like_bp = Blueprint('like_bp', __name__)
 
@@ -37,9 +32,11 @@ def toggleLike():
 @like_bp.get("/likedNotes/getAll")
 def getLikedNotes():
     try:
-        # userId = request.args.get("userId")
-        # if not userId:
-        #     return jsonify({"status": "error", "message": "userId is required"})
+        user = session.get("user")
+        userId = user.get('id')
+
+        if not userId: 
+            return jsonify({"status": "error", "message": "userId is Required."})
 
         # get all liked notes for this user
         likes = Like.objects()

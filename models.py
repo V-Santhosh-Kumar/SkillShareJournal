@@ -56,7 +56,7 @@ class Comment(Document):
 
 class SavedNotes(Document):
     id = StringField(primary_key=True, default=lambda:str(uuid4()))  
-    # user = ReferenceField(User, reverse_delete_rule=CASCADE)
+    user = ReferenceField(User, reverse_delete_rule=CASCADE)
     note = ReferenceField(Note, reverse_delete_rule=CASCADE)
     addedTime = DateTimeField(default=datetime.now())
     updatedTime = DateTimeField()

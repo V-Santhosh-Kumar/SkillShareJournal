@@ -3,6 +3,8 @@ from mongoengine import connect, connection
 
 app = Flask(__name__)
 
+app.secret_key = "supersecret123"
+
 try:
     connect(host="mongodb://localhost:27017/skillShareJournal")
     if connection.get_connection():

@@ -27,7 +27,7 @@ def login():
             "id": user.id
         }
         
-        return jsonify({"status": "success", "message": "User Registered Succcessfully."})
+        return jsonify({"status": "success", "message": "User Logged in Succcessfully."})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
     

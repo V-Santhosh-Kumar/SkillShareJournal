@@ -1,6 +1,6 @@
 from mongoengine import *
 from models import *
-from flask import request, jsonify, Blueprint , url_for
+from flask import request, jsonify, Blueprint , url_for,session
 
 
 note_bp = Blueprint('note_bp', __name__)
@@ -13,6 +13,16 @@ def addNote():
         code = request.form.get("code")
         tag = request.form.get("tag")
         images = request.files.getlist("images[]")  # receive multiple files
+
+        user = session.get("user")
+        print(user)
+        userId = user.get('id')
+        print(userId)
+
+
+        user = User.objects(id=userId).first()
+        if not user: 
+            return jsonify({"status": "error", "message": "user is Required."})
 
         if not title or not description:
             return jsonify({"status": "error", "message": "All Fields are Required"})
@@ -33,8 +43,8 @@ def addNote():
             code=code,
             tag=tag,
             image=saved_files,# or store paths/URLs
-            shareableLink=shareable_link
-            # user = current_user 
+            shareableLink=shareable_link,
+            user = user 
         )
         note.save()
 

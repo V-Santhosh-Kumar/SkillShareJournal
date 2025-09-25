@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <form name="login" id="login">
+    <form name="login" id="loginForm">
         <div class="d-flex justify-content-center gap-3 align-items-center mt-5">
             <img src="../static/img/sticky-notes.png" class="img-fluid" width="60" alt="Logo">
             <h2>Skill Share Journal</h2>
@@ -23,18 +23,18 @@
            
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="SignupEmail" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>+
+                <input type="email" class="form-control" name="loginEmail" id="loginEmail" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>  
             </div>
             <div class="mb-3">
                 <label for="SignupPassword" class="form-label">Password</label>
-                <input type="password" class="form-control" id="SignupPassword">
+                <input type="password" class="form-control" name="loginPassword" id="loginPassword">
             </div>
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="CheckOut">
                 <label class="form-check-label" for="CheckOut">Check me out</label>
             </div>
-            <button type="submit" class="btn btn-secondary mb-3">Submit</button>
+            <button type="submit" id="submitBtn" class="btn btn-secondary mb-3">Submit</button>
         </div>
 
 

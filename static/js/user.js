@@ -141,7 +141,7 @@ document.querySelector('table tbody').addEventListener("click", (event)=>{
         .then(data =>{
             if (data.status == "success") {
                 let user = data.data
-                // document.getElementById("editUser").value = data.data.name
+                document.getElementById("editUser").value = data.data.name
                 document.getElementById("editUsername").value = user.username
                 document.getElementById("editPhone").value = user.phone
                 document.getElementById("editEmail").value = user.email
