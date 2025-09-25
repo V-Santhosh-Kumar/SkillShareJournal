@@ -13,7 +13,7 @@ def addtags():
         name = data.get("name")
         description = data.get("description")
 
-        if not name or description:
+        if not name or not description:
             return jsonify({"status": "error", "message": "All Fields are Required"})
         
         Tags(

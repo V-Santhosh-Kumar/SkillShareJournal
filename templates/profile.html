@@ -52,16 +52,9 @@
                         </select>
                     </form>
                     <!-- Right: Nav links -->
-                    <ul class="navbar-nav ms-auto">
+                   <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#"><i
-                                    class="bi bi-info-circle"></i></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#"><i class="bi bi-gear"></i></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#"><i
+                            <a class="nav-link active" aria-current="page" href="/profile"><i
                                     class="bi bi-person-circle"></i></a>
                         </li>
 
@@ -70,7 +63,7 @@
             </div>
         </div>
     </nav>
-
+<!-- 
     <div class="cardpage d-flex ms-5">
         <div class="cardContainer row-gap-2 d-flex flex-wrap">
             <div class="container mt-5" style="flex:1 0 35%; height: 50vh !important; width: 25% !important;">
@@ -481,7 +474,86 @@
             </div>
         </div>
 
+    </div> -->
+
+
+    <div class="cardpage d-flex ms-5">
+        <div class="cardcontainer row-gap-2 d-flex flex-wrap">
+            <!-- Dynamically Loaded -->
+        </div>
+
+        <div class="profileOut" style="position: sticky; right: 0;height: 450px;">
+            <!-- Dynamically Loaded -->
+        </div>
+
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #DD7D5B;">
+                    <h1 class="modal-title fs-5" id="commentModalLabel">Comments</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row row-gap-3 comments-container">
+                    <!-- Dynamically Loaded -->
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <form id="commentForm" class="modal-footer d-flex justify-content-between">
+                        <textarea name="comment" id="" class="text w-50" rows="x3"></textarea>
+                        <div>
+                            <input type="hidden" name="notesId" id="notesId">
+                            <button type="submit" id="commentBtn" class="btn btn-primary">Comment</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+        <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="shareModalLabel">Share on Social Media</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body row row-gap-3">
+                        <div class="input-group">
+                            <input type="text" id="shareLink" class="form-control" value=""
+                                readonly>
+                            <button class="btn btn-outline-primary" type="button" id="copyBtn">
+                                <i class="bi bi-clipboard"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="../static/js/profile.js"></script>
+        <script src="../static/js/comment.js"></script>
 
 </body>
 

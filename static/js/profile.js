@@ -2,20 +2,7 @@ fetch("/note/getAll")
     .then(res => res.json())
     .then(data => {
         if (data.status === "success") {
-            function timeAgo(dateString) {
-                let now = new Date();
-                let noteDate = new Date(dateString);
-                let diff = Math.floor((now - noteDate) / 1000); // in seconds
-
-                if (diff < 60) return `${diff} sec ago`;
-                if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
-                if (diff < 86400) return `${Math.floor(diff / 3600)} hr ago`;
-                if (diff < 2592000) return `${Math.floor(diff / 86400)} days ago`;
-                return noteDate.toLocaleDateString(); // fallback full date
-            }
-
             let notes = data.data;
-
 
             document.querySelector(".cardcontainer").innerHTML = "";
 
@@ -49,58 +36,60 @@ fetch("/note/getAll")
                 }
 
                 let card = `
-                    <div class="note-card card shadow-sm">
-                        <div class="d-flex h-100">
-                            
-                            <!-- Left Content -->
-                            <div class="flex-grow-1 p-3 overflow-auto">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <small class="text-muted">${timeAgo(note.addedTime)}</small>
-                                    <span class="badge px-2 py-1" style="background-color: #DD7D5B;">${note.tag}</span>
-                                </div>
-
-
-                                <div class="d-flex gap-2 mb-2 overflow-auto">
-                                    ${imgs}
-                                </div>
-
-                                <h5 class="fw-bold">${note.title}</h5>
+                <div class="container mt-5" style="height: 50vh !important; width: 50% !important;">
+                    <div class="d-flex justify-content-between rounded-3"
+                        style=" color: black; background-color: #fbdfc1 ;">
+                        <div class="col-md-2 w-75 p-3" style="overflow-y: auto; scrollbar-width: none;">
+                            <div class="row d-flex justify-content-center align-items-center">
+                                <div class="col">2hr ago</div>
+                                <span class="badge w-25 vh-25  px-1" style="background-color: #DD7D5B ;">${note.tag}</span>
+                            </div>
+                            <div class="d-flex column-gap-2 my-3" style="width: 100%;overflow-x: auto;">  
+                                ${imgs}
+                            </div>
+                            <div class="row" style="border-bottom: 1px solid white;">
+                                <h5>${note.title}</h5>
                                 <p class="text-wrap text-break">${note.description}</p>
-
-                                <!-- Comments Section -->
-                                <div class="comments-section mt-3">
-                                    <h6 class="fw-semibold">Comments</h6>
-                                    <div class="comments-container">
-                                        ${commentsHtml}
-                                    </div>
-                                </div>
                             </div>
 
-                            <!-- Right Side Icons -->
-                            <div class="icon-bar d-flex flex-column justify-content-between align-items-center p-2">
-                                <div class="d-flex flex-column align-items-center gap-3">
-                                    <a class="nav-link user-icon">
-                                        <i class="bi bi-person fs-5"></i>
-                                    </a>
-                                    <a class="nav-link like-btn d-flex flex-column align-items-center" data-noteid="${note.id}">
-                                        ${likeIcon}
-                                    </a>
-                                    <a class="nav-link commentBtn" data-noteid="${note.id}" data-bs-toggle="modal" data-bs-target="#commentModal">
-                                        <i class="bi bi-chat-left-text fs-4"></i>
-                                    </a>
-                                    <a class="nav-link shareBtn" data-noteid="${note.id}" data-bs-toggle="modal" data-bs-target="#shareModal">
-                                        <i class="bi bi-send fs-4"></i>
-                                    </a>
-                                    <a class="nav-link bookmark-btn" data-noteid="${note.id}">
-                                        ${bookmarkIcon}
-                                    </a>
+                            <!-- ✅ Comments Section -->
+                            <div class="comments-section mt-2">
+                                <h6>Comments</h6>
+                                <div class="d-flex gap-2 justify-content-between">
+                                ${commentsHtml}
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Side Icons -->
+                        <div class="col-md-2 p-2 rounded-3 d-flex flex-column justify-content-between align-items-center"
+                            style="background-color: #DD7D5B;">
+                            <div class="d-flex flex-column align-items-center row-gap-2">
+                                <a class="nav-link" style="border: 2px solid black; border-radius: 100px; width: 30px; height: 30px; 
+                                    display: flex; align-items: center; justify-content: center; scale: 0.9;">
+                                    <i class="bi bi-person fs-5"></i>
+                                </a>
+                                <a class="nav-link like-btn d-flex flex-column align-items-center" data-noteid="${note.id}"> ${likeIcon}</a>
+
+                                <a class="nav-link commentBtn" data-noteid="${note.id}" data-bs-toggle="modal" data-bs-target="#commentModal">
+                                    <i class="bi bi-chat-left-text fs-4"></i>
+                                </a>
+
+                                <a class="nav-link shareBtn" data-noteid="${note.id}" data-bs-toggle="modal" data-bs-target="#shareModal">
+                                    <i class="bi bi-send fs-4"></i>
+                                </a>
+
+                                <a class="nav-link bookmark-btn" data-noteid="${note.id}">
+                                    ${bookmarkIcon}
+                                </a>
+                            </div>
+                            <div>
                                 <a class="nav-link"><i class="bi bi-three-dots-vertical fs-4"></i></a>
                             </div>
                         </div>
                     </div>
-                    `;
-
+                </div>
+                `;
 
                 document.querySelector(".cardcontainer").innerHTML += card;
             });
@@ -213,3 +202,54 @@ document.addEventListener("click", (event) => {
         }
     }
 });
+
+function loadUserProfile(userId) {
+    fetch(`/user/getSpecific?id=${userId}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                const user = data.data;
+
+                const profileContainer = document.querySelector(".profileOut");
+
+                profileContainer.innerHTML = `
+                    <div class="profileMiddle d-flex">
+                        <!-- Like -->
+                        <a class="nav-link like-btn d-flex flex-column align-items-center" 
+                           style="position: relative;top: -50px;left: 65px;">
+                            <i class="bi bi-heart-fill text-danger fs-3"></i> 
+                            <span style="margin-top: -8px;font-size: 11px;"> ${user.likeCount} </span>
+                        </a>
+
+                        <!-- Saved Notes -->
+                        <a class="nav-link d-flex flex-column align-items-center" 
+                           style="position: relative;top: 55px;left: 140px;">
+                            <i id="journalsIcon" class="bi bi-bookmark fs-4"></i>  
+                            <span style="font-size: 11px;"> ${user.savedNotesCount} </span>
+                        </a>
+
+                        <!-- Comments -->
+                        <a class="nav-link" 
+                           style="position: relative;top: 60px;left: 325px;">
+                            <i id="chatLeftIcon" class="bi bi-chat-left-text fs-4 "></i>
+                            <span style="font-size: 11px; position: relative; top: 15px; right: 20px;"> ${user.commentCount} </span>
+                        </a>
+                        
+                        <!-- Profile Info -->
+                        <div class="profileIn mt-5 text-center">
+                            <img src="../static/img/profile img2.jpg" alt="Profile Image" class="rounded-circle" width="100">
+                            <h1>${user.username}</h1>
+                        </div>
+                    </div>
+                `;
+            } else {
+                console.error("Error:", data.message);
+            }
+        })
+        .catch(err => console.error("Failed to load user:", err));
+}
+
+// Example usage → pass logged-in user ID
+loadUserProfile("680b3591-ef2d-45ac-9343-133fc8adc290");
+
+    

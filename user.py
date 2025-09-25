@@ -83,6 +83,11 @@ def getSpecificUser():
         if not user:
             return jsonify({"status": "error", "message": "User not found."})
 
+        like = Like.objects().count()
+        savedNotes = SavedNotes.objects().count()
+        comment = Comment.objects().count()
+
+
         data = {
                 "id": user.id,
                 "username": user.username,
@@ -90,7 +95,10 @@ def getSpecificUser():
                 "phone": user.phone,
                 "role": user.role.name,
                 "addedTime": user.addedTime,
-                "updatedTime": user.updatedTime
+                "updatedTime": user.updatedTime,
+                "likeCount": like,
+                "savedNotesCount": savedNotes,
+                "commentCount": comment
             }
         
         return jsonify({"status": "success", "message": "User Retrieved Successfully", "data": data})
@@ -154,3 +162,5 @@ def deleteUser():
     except Exception as e:
 
         return jsonify({"status": "error", "message": str(e)})
+    
+
