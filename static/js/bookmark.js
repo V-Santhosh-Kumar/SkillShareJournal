@@ -2,6 +2,17 @@ fetch("/savedNotes/getAll")
     .then(res => res.json())
     .then(data => {
         if (data.status === "success") {
+            function timeAgo(dateString) {
+                let now = new Date();
+                let noteDate = new Date(dateString);
+                let diff = Math.floor((now - noteDate) / 1000); // in seconds
+
+                if (diff < 60) return `${diff} sec ago`;
+                if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
+                if (diff < 86400) return `${Math.floor(diff / 3600)} hr ago`;
+                if (diff < 2592000) return `${Math.floor(diff / 86400)} days ago`;
+                return noteDate.toLocaleDateString(); // fallback full date
+            }
             let notes = data.data;
 
             document.querySelector(".cardcontainer").innerHTML = "";
@@ -20,70 +31,77 @@ fetch("/savedNotes/getAll")
                     ? `<i class="bi bi-heart-fill text-danger fs-4"></i> <span style="margin-top: -8px;font-size: 11px;"> ${note.likeCount} </span>`
                     : `<i class="bi bi-heart fs-4"></i> <span style="margin-top: -8px;font-size: 11px;"> ${note.likeCount} </span>`;
 
-
-                let card = `
-          <div class="container mt-5" style="flex:1 0 35%; height: 50vh !important; width: 25% !important;">
-              <div class="d-flex justify-content-between rounded-3"
-                  style=" color: black; background-color: #fbdfc1 ;">
-                  <div class="col-md-2 w-75 p-3" style="overflow-y: auto; scrollbar-width: none;">
-                      <div class="row d-flex  justify-content-center align-items-center">
-                          <div class="col">2hr ago</div>
-                          <span class="badge w-25 vh-25  px-1" style="background-color: #DD7D5B ;">${note.tag}</span>
-                      </div>
-                      <div class="d-flex column-gap-2 my-3" style="width: 100%;overflow-x: auto;">  
-                          ${imgs}
-                      </div>
-                      <div class="row" style="border-bottom: 1px solid white;">
-                          <h5>${note.title}</h5>
-                          <p class="text-wrap text-break">${note.description}</p>
-                      </div>
-                      <div class="d-flex justify-content-between p-2 column-gap-1 vh-25">
-                            <div class="card w-50 p-2">
-                                <span><i class="bi bi-person-circle"></i> Username</span>
-                                <p class="text-wrap text-break">xrtcfgvybhujnkdxcfygvhubj</p>
-
+                 // ✅ Build comments section
+                let commentsHtml = "";
+                if (note.comments && note.comments.length > 0) {
+                    note.comments.forEach(c => {
+                        commentsHtml += `
+                            <div class="card w-100 p-2 mb-2">
+                                <span><i class="bi bi-person-circle"></i> ${c.user || "Anonymous"}</span>
+                                <p class="text-wrap text-break">${c.comment}</p>
                             </div>
-                            <div class="card w-50 p-2">
-                                <span><i class="bi bi-person-circle"></i> Username</span>
-                                <p class="text-wrap text-break">xrtcfgvybhujnkdxcfygvhubj</p>
+                        `;
+                    });
+                } else {
+                    commentsHtml = `<p class="text-muted">No comments yet</p>`;
+                }
+                
+                let card = `
+                    <div class="note-card card shadow-sm">
+                        <div class="d-flex h-100">
+                            
+                            <!-- Left Content -->
+                            <div class="flex-grow-1 p-3 overflow-auto">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <small class="text-muted">${timeAgo(note.addedTime)}</small>
+                                    <span class="badge px-2 py-1" style="background-color: #DD7D5B;">${note.tag}</span>
+                                </div>
+
+
+                                <div class="d-flex gap-2 mb-2 overflow-auto">
+                                    ${imgs}
+                                </div>
+
+                                <h5 class="fw-bold">${note.title}</h5>
+                                <p class="text-wrap text-break">${note.description}</p>
+
+                                <!-- Comments Section -->
+                                <div class="comments-section mt-3">
+                                    <h6 class="fw-semibold">Comments</h6>
+                                    <div class="comments-container">
+                                        ${commentsHtml}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Side Icons -->
+                            <div class="icon-bar d-flex flex-column justify-content-between align-items-center p-2">
+                                <div class="d-flex flex-column align-items-center gap-3">
+                                    <a class="nav-link user-icon">
+                                        <i class="bi bi-person fs-5"></i>
+                                    </a>
+                                    <a class="nav-link like-btn d-flex flex-column align-items-center" data-noteid="${note.id}">
+                                        ${likeIcon}
+                                    </a>
+                                    <a class="nav-link commentBtn" data-noteid="${note.id}" data-bs-toggle="modal" data-bs-target="#commentModal">
+                                        <i class="bi bi-chat-left-text fs-4"></i>
+                                    </a>
+                                    <a class="nav-link shareBtn" data-noteid="${note.id}" data-bs-toggle="modal" data-bs-target="#shareModal">
+                                        <i class="bi bi-send fs-4"></i>
+                                    </a>
+                                    <a class="nav-link bookmark-btn" data-noteid="${note.id}">
+                                        ${bookmarkIcon}
+                                    </a>
+                                </div>
+                                <a class="nav-link"><i class="bi bi-three-dots-vertical fs-4"></i></a>
                             </div>
                         </div>
-                  </div>
-
-                  <!-- Right Side Icons -->
-                  <div class="col-md-2 p-2 rounded-3 d-flex flex-column justify-content-between align-items-center"
-                       style="background-color: #DD7D5B;">
-                      <div class="d-flex flex-column align-items-center row-gap-2">
-                          <a class="nav-link" style="border: 2px solid black; border-radius: 100px; width: 30px; height: 30px; 
-                             display: flex; align-items: center; justify-content: center; scale: 0.9;">
-                              <i class="bi bi-person fs-5"></i>
-                          </a>
-                          <a class="nav-link like-btn d-flex flex-column align-items-center" data-noteid="${note.id}"> ${likeIcon}</a>
-
-                          <a class="nav-link commentBtn" data-noteid="${note.id}" data-bs-toggle="modal" data-bs-target="#commentModal">
-                             <i class="bi bi-chat-left-text fs-4"></i>
-                         </a>
-
-                          <a class="nav-link"  data-bs-toggle="modal" data-bs-target="#shareModal">
-                            <i class="bi bi-send fs-4"></i>
-                          </a>
-
-                          <!-- Bookmark with dataset -->
-                          <a class="nav-link bookmark-btn" data-noteid="${note.id}">
-                              ${bookmarkIcon}
-                          </a>
-                      </div>
-                      <div>
-                          <a class="nav-link"><i class="bi bi-three-dots-vertical fs-4"></i></a>
-                      </div>
-                  </div>
-              </div>
-          </div>
-        `;
+                    </div>
+                    `;
 
                 document.querySelector(".cardcontainer").innerHTML += card;
             });
-            
+
             // Attach click events to all bookmark buttons
             document.querySelectorAll(".bookmark-btn").forEach(btn => {
                 btn.addEventListener("click", () => {

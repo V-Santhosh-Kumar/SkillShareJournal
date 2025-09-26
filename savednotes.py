@@ -1,4 +1,4 @@
-from models import SavedNotes, User, Note, Like
+from models import SavedNotes, User, Note, Like, Comment
 from flask import request, jsonify, Blueprint, session
 
 
@@ -45,10 +45,13 @@ def addsavednotes():
 def getSavedNotes():
     try:
         user = session.get("user")
-        userId = user.get('id')
+        user_id = user.get("id") if user else None
 
-        if not userId: 
-            return jsonify({"status": "error", "message": "userId is Required."})
+        if not user_id:
+            return jsonify({
+                "status": "error",
+                "message": "User not logged in. Please log in to continue."
+            }), 401
 
         saved = SavedNotes.objects()  # or filter your relation
         note_ids = [s.note.id for s in saved]
@@ -59,6 +62,18 @@ def getSavedNotes():
             isLiked = Like.objects(note=note).first() is not None
             isSaved = SavedNotes.objects(note=note.id).first() is not None
             likeCount = Like.objects().count()
+
+            comments = Comment.objects(note=note).order_by("-addedTime")
+            comment_list = []
+            for c in comments:
+                comment_list.append({
+                    "id": str(c.id),
+                    "user": c.user.username if c.user else None,
+                    "comment": c.comment,
+                    "addedTime": c.addedTime,
+                    "updatedTime": c.updatedTime
+                })
+
             data.append({
                 "id": str(note.id),
                 "title": note.title,
@@ -70,7 +85,8 @@ def getSavedNotes():
                 "updatedTime": note.updatedTime,
                 "isSaved": isSaved,
                 "isLiked": isLiked,
-                "likeCount": likeCount
+                "likeCount": likeCount,
+                "comments": comment_list
             })
 
         return jsonify({"status": "success", "data": data})

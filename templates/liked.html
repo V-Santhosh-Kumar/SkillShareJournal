@@ -14,6 +14,48 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
+    
+    
+    <style>
+        .cardcontainer {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .note-card {
+            width: 400px;
+            /* fixed width for consistency */
+            height: 450px;
+            /* fixed height */
+            border-radius: 12px;
+            background-color: #fbdfc1;
+            display: flex;
+            flex: 1 0 400px;
+        }
+
+        .note-card .overflow-auto {
+            max-height: calc(100% - 20px);
+        }
+
+        .icon-bar {
+            background-color: #DD7D5B;
+            width: 60px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .user-icon {
+            border: 2px solid black;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -82,7 +124,7 @@
             </li>
         </ul>
     </div>
-    <div class="cardpage d-flex ms-5">
+    <div class="cardpage d-flex mt-5 mx-3">
         <div class="cardcontainer row-gap-2 d-flex flex-wrap">
             <!-- Dynamically Loaded -->
         </div>
