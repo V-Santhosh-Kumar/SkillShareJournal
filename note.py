@@ -1,6 +1,6 @@
 from mongoengine import *
 from models import *
-from flask import request, jsonify, Blueprint , url_for,session
+from flask import request, jsonify, Blueprint , url_for,session, render_template
 
 
 note_bp = Blueprint('note_bp', __name__)
@@ -48,7 +48,7 @@ def addNote():
         )
         note.save()
 
-        return jsonify({"status": "success", "message": "Note Added Successfully"})
+        return jsonify({"status": "success", "message": "Note Added Successfully","shareableLink": f"/note/{shareable_link}"})
     
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
@@ -64,8 +64,8 @@ def get_all_notes():
         for note in notes:
             isLiked = Like.objects(note=note).first() is not None
             isSaved = SavedNotes.objects(note=note.id).first() is not None
-            likeCount = Like.objects().count()
-            note_url = url_for('note_bp.getSpecificNote', id=note.id, _external=True)
+            likeCount = Like.objects(note=note).count()
+            note_url = "/note/"+note.id
 
 
 
@@ -186,5 +186,21 @@ def deleteNote():
     except Exception as e:
 
         return jsonify({"status": "error", "message": str(e)})
-    
+
+
+
+@note_bp.get("/note/<id>")
+def getNote(id):
+    try:
+        note = Note.objects(id=id).first()
+        if not note:
+            return jsonify({"status": "error", "message": "Note not found"})
+
+        return render_template("noteDetail.html", note=note)
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
+
+
+
 

@@ -197,19 +197,14 @@ document.getElementById("copyBtn").addEventListener("click", () => {
         });
 });
 
-document.addEventListener("click", (event) => {
-    if (event.target.closest(".shareBtn")) {
-        const btn = event.target.closest(".shareBtn");
-        const notesId = btn.getAttribute("data-noteid");
-
-        const shareURL = `http://localhost:5000/note/getSpecific?id=${notesId}`;
-        console.log("Generated share URL:", shareURL);
-
-        const shareLinkInput = document.getElementById("shareLink");
-        if (shareLinkInput) {
-            shareLinkInput.value = shareURL;
-        } else {
-            console.error('Share Link input not found!');
-        }
-    }
+document.addEventListener("click", (event) => { 
+    if (event.target.closest(".shareBtn")){ 
+        const btn = event.target.closest(".shareBtn"); 
+        const notesId = btn.getAttribute("data-noteid"); 
+        const shareURL = `http://localhost:5000/note/${notesId}`; 
+        console.log("Generated share URL:", shareURL); 
+        const shareLinkInput = document.getElementById("shareLink"); 
+        if (shareLinkInput) { shareLinkInput.value = shareURL; } 
+        else { console.error('Share Link input not found!'); } 
+    } 
 });

@@ -12,7 +12,8 @@ fetch("/note/getAll")
         note.image.forEach((image, index) => {
             carouselInner += `
               <div class="carousel-item ${index == 0? "active": ""}">
-                <img src="${image}" class="img-thumbnail w-100">
+                <img src="${image}" class="img-thumbnail d-block w-100"
+                style="height:400px; object-fit:cover; border-radius:8px;">
               </div>
             `
         })
